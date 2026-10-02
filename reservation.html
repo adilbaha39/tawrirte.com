@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Réservation – Tawrirte | Essaouira</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: #f8f4ef; color: #2c2c2c; line-height: 1.6; overflow-x: hidden; }
+    img { max-width: 100%; height: auto; display: block; }
+    a { text-decoration: none; color: inherit; }
+    button, input, select, textarea { font-family: inherit; }
+    :root { --blue: #1a4b7c; --blue-dark: #0f2f4d; --cream: #f8f4ef; --text: #2c2c2c; --text-light: #5a5a5a; --white: #ffffff; --shadow: 0 12px 32px rgba(0,0,0,0.09); --radius: 14px; }
+    .header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(248,244,239,0.96); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(0,0,0,0.05); transition: box-shadow 0.3s; }
+    .header.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+    .header-inner { max-width: 1280px; margin: 0 auto; padding: 0 28px; height: 74px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 600; color: var(--blue-dark); letter-spacing: 0.5px; line-height: 1.15; }
+    .logo span { display: block; font-size: 0.62rem; font-weight: 400; letter-spacing: 1.8px; color: var(--text-light); text-transform: uppercase; }
+    .nav { display: flex; align-items: center; gap: 28px; }
+    .nav a { font-size: 0.88rem; font-weight: 500; color: var(--text); position: relative; transition: color 0.2s; }
+    .nav a:hover { color: var(--blue); }
+    .nav a.active { color: var(--blue); }
+    .nav a.active::after { content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 28px; height: 2px; background: var(--blue); border-radius: 2px; }
+    .btn-reserve { background: var(--blue); color: white; padding: 11px 22px; border-radius: 7px; font-size: 0.85rem; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; }
+    .btn-reserve:hover { background: var(--blue-dark); transform: translateY(-1px); }
+    .menu-toggle { display: none; background: none; border: none; font-size: 1.55rem; color: var(--blue-dark); cursor: pointer; }
+    .hero { position: relative; height: 78vh; min-height: 520px; margin-top: 74px; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: url('hero-reservation.jpg') center/cover no-repeat; background-color: #1a3a5c; }
+    .hero-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(105deg, rgba(12,28,48,0.78) 0%, rgba(12,28,48,0.35) 55%, rgba(12,28,48,0.15) 100%); }
+    .hero-content { position: relative; z-index: 2; max-width: 1280px; margin: 0 auto; padding: 0 28px; height: 100%; display: flex; flex-direction: column; justify-content: center; color: white; }
+    .hero-tag { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.25rem; opacity: 0.95; margin-bottom: 10px; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5.2vw, 3.8rem); font-weight: 500; line-height: 1.18; max-width: 620px; margin-bottom: 18px; }
+    .hero p { font-size: 1.05rem; max-width: 420px; opacity: 0.92; font-weight: 300; }
+    .hero-badge { position: absolute; bottom: 42px; right: 48px; font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.35rem; color: white; opacity: 0.9; writing-mode: vertical-rl; transform: rotate(180deg); }
+    .form-section { padding: 70px 28px 50px; background: var(--cream); }
+    .form-container { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.15fr; gap: 50px; align-items: start; }
+    .form-left .label { font-size: 0.78rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--blue); margin-bottom: 10px; }
+    .form-left h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 500; color: var(--blue-dark); margin-bottom: 14px; line-height: 1.25; }
+    .form-left p { color: var(--text-light); font-size: 1rem; max-width: 380px; margin-bottom: 28px; }
+    .contact-options { display: flex; flex-direction: column; gap: 16px; }
+    .contact-option { display: flex; align-items: center; gap: 14px; font-size: 0.95rem; }
+    .contact-option .icon { width: 42px; height: 42px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; box-shadow: 0 4px 12px rgba(0,0,0,0.06); color: var(--blue); }
+    .contact-option strong { display: block; font-size: 0.82rem; color: var(--text-light); font-weight: 500; }
+    .form-card { background: white; border-radius: 18px; padding: 32px 34px; box-shadow: var(--shadow); border: 1.5px solid #e8e0d4; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: flex; align-items: center; gap: 8px; font-size: 0.88rem; font-weight: 500; color: var(--blue-dark); margin-bottom: 8px; }
+    .form-group label span { font-size: 1rem; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 13px 16px; border: 1.5px solid #e5ddd0; border-radius: 9px; font-size: 0.95rem; background: #faf8f5; color: var(--text); transition: border-color 0.2s, box-shadow 0.2s; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(26,75,124,0.12); background: white; }
+    .form-group textarea { min-height: 90px; resize: vertical; }
+    .btn-submit { width: 100%; background: var(--blue); color: white; border: none; padding: 16px; border-radius: 9px; font-size: 1rem; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; transition: all 0.2s; margin-top: 8px; }
+    .btn-submit:hover { background: var(--blue-dark); transform: translateY(-1px); }
+    .steps-section { background: white; padding: 50px 28px 60px; text-align: center; }
+    .steps-label { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.3rem; color: var(--blue); margin-bottom: 30px; }
+    .steps { display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; max-width: 800px; margin: 0 auto; }
+    .step { display: flex; flex-direction: column; align-items: center; gap: 10px; min-width: 140px; }
+    .step-num { width: 48px; height: 48px; background: var(--blue); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 1.15rem; }
+    .step p { font-size: 0.9rem; color: var(--text-light); max-width: 130px; }
+    .step-arrow { font-size: 1.4rem; color: var(--blue); opacity: 0.4; margin-top: -20px; }
+    .infos-section { background: var(--cream); padding: 70px 28px 80px; }
+    .infos-container { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.1fr 1fr; gap: 30px; align-items: start; }
+    .infos-left .label { font-size: 0.78rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--blue); margin-bottom: 10px; }
+    .infos-left h2 { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 500; color: var(--blue-dark); margin-bottom: 14px; }
+    .infos-left p { color: var(--text-light); margin-bottom: 22px; max-width: 340px; }
+    .info-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; font-size: 0.95rem; }
+    .info-item span { color: var(--blue); font-size: 1.1rem; }
+    .btn-map { display: inline-flex; align-items: center; gap: 8px; background: var(--blue); color: white; padding: 12px 22px; border-radius: 8px; font-size: 0.9rem; font-weight: 500; margin-top: 18px; transition: all 0.2s; }
+    .btn-map:hover { background: var(--blue-dark); transform: translateY(-1px); }
+    .infos-images { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .infos-images img { width: 100%; height: 160px; object-fit: cover; border-radius: 14px; background: #e0d6c8; box-shadow: var(--shadow); }
+    .infos-images img:first-child { grid-column: span 2; height: 200px; }
+    .map-box { background: #e8f0f8; border-radius: 16px; overflow: hidden; height: 100%; min-height: 340px; position: relative; box-shadow: var(--shadow); }
+    .map-box img { width: 100%; height: 100%; object-fit: cover; }
+    .map-overlay { position: absolute; bottom: 16px; left: 16px; right: 16px; background: white; padding: 12px 16px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 16px rgba(0,0,0,0.1); font-size: 0.9rem; font-weight: 500; }
+    .map-overlay a { color: var(--blue); font-size: 0.85rem; }
+    .footer { background: var(--blue-dark); color: rgba(255,255,255,0.85); padding: 55px 28px 26px; }
+    .footer-grid { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1.2fr 1.3fr; gap: 40px; }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: white; margin-bottom: 4px; }
+    .footer-logo span { display: block; font-size: 0.68rem; font-weight: 400; opacity: 0.7; letter-spacing: 1.2px; }
+    .footer-logo .city { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1rem; margin-top: 10px; opacity: 0.85; }
+    .footer h4 { color: white; font-size: 0.95rem; margin-bottom: 16px; font-weight: 600; }
+    .footer ul { list-style: none; }
+    .footer li { margin-bottom: 9px; }
+    .footer a { font-size: 0.9rem; opacity: 0.8; transition: opacity 0.2s; }
+    .footer a:hover { opacity: 1; }
+    .contact-info p { font-size: 0.9rem; margin-bottom: 11px; display: flex; align-items: flex-start; gap: 10px; }
+    .socials { display: flex; gap: 12px; margin-top: 16px; }
+    .socials a { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,0.28); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; transition: all 0.2s; }
+    .socials a:hover { background: white; color: var(--blue-dark); }
+    .footer-bottom { max-width: 1180px; margin: 36px auto 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.12); font-size: 0.8rem; opacity: 0.55; text-align: center; }
+    @media (max-width: 1024px) {
+      .form-container { grid-template-columns: 1fr; gap: 40px; }
+      .infos-container { grid-template-columns: 1fr 1fr; }
+      .map-box { grid-column: span 2; min-height: 280px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 30px; }
+    }
+    @media (max-width: 700px) {
+      .nav { display: none; }
+      .menu-toggle { display: block; }
+      .nav.open { display: flex; flex-direction: column; position: absolute; top: 74px; left: 0; right: 0; background: white; padding: 24px 28px; gap: 18px; box-shadow: 0 12px 30px rgba(0,0,0,0.1); }
+      .hero { height: 70vh; min-height: 460px; }
+      .hero-badge { display: none; }
+      .form-row { grid-template-columns: 1fr; }
+      .infos-container { grid-template-columns: 1fr; }
+      .map-box { grid-column: auto; }
+      .steps { gap: 12px; }
+      .step-arrow { display: none; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header" id="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">TAWRIRTE<span>Café & Restaurant</span></a>
+      <nav class="nav" id="nav">
+        <a href="index.html">Accueil</a>
+        <a href="restaurant.html">Le Restaurant</a>
+        <a href="carte.html">La Carte</a>
+        <a href="galerie.html">Galerie</a>
+        <a href="reservation.html" class="active">Réservation</a>
+      </nav>
+      <a href="#formulaire" class="btn-reserve">📅 RÉSERVER</a>
+      <button class="menu-toggle" id="menuToggle">☰</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-tag">Réservation</div>
+      <h1>Installez-vous,<br>on s’occupe du reste</h1>
+      <p>Réservez votre table en quelques clics et vivez une expérience authentique au cœur d’Essaouira.</p>
+    </div>
+    <div class="hero-badge">Une table vous attend !</div>
+  </section>
+
+  <section class="form-section" id="formulaire">
+    <div class="form-container">
+      <div class="form-left">
+        <div class="label">RÉSERVER UNE TABLE</div>
+        <h2>Votre moment<br>à Tawrirte</h2>
+        <p>Choisissez la date, l’heure et le nombre de personnes. Nous vous confirmons votre réservation rapidement.</p>
+        <div class="contact-options">
+          <div class="contact-option"><div class="icon">📞</div><div><strong>Réservation par téléphone</strong>06 28 25 97 54</div></div>
+          <div class="contact-option"><div class="icon">💬</div><div><strong>WhatsApp</strong>06 28 25 97 54</div></div>
+        </div>
+      </div>
+      <div class="form-card">
+        <form id="reservationForm">
+          <div class="form-row">
+            <div class="form-group"><label><span>📅</span> Date</label><input type="date" name="date" required></div>
+            <div class="form-group"><label><span>🕐</span> Heure</label><select name="heure" required><option value="">Choisir une heure</option><option value="12:00">12:00</option><option value="12:30">12:30</option><option value="13:00">13:00</option><option value="13:30">13:30</option><option value="19:00">19:00</option><option value="19:30">19:30</option><option value="20:00">20:00</option><option value="20:30">20:30</option><option value="21:00">21:00</option><option value="21:30">21:30</option></select></div>
+          </div>
+          <div class="form-group"><label><span>👥</span> Nombre de personnes</label><select name="personnes" required><option value="1">1 personne</option><option value="2" selected>2 personnes</option><option value="3">3 personnes</option><option value="4">4 personnes</option><option value="5">5 personnes</option><option value="6">6 personnes</option><option value="7">7 personnes</option><option value="8">8 personnes</option><option value="9+">9 personnes ou plus</option></select></div>
+          <div class="form-group"><label><span>👤</span> Nom complet</label><input type="text" name="nom" placeholder="Votre nom" required></div>
+          <div class="form-group"><label><span>📱</span> Téléphone</label><input type="tel" name="telephone" placeholder="Votre numéro" required></div>
+          <div class="form-group"><label><span>✉️</span> Message (optionnel)</label><textarea name="message" placeholder="Une demande particulière ?"></textarea></div>
+          <button type="submit" class="btn-submit">📅 CONFIRMER MA RÉSERVATION →</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="steps-section">
+    <div class="steps-label">C’est simple !</div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>Choisissez<br>votre date et votre heure</p></div>
+      <div class="step-arrow">→</div>
+      <div class="step"><div class="step-num">2</div><p>Indiquez<br>le nombre de personnes</p></div>
+      <div class="step-arrow">→</div>
+      <div class="step"><div class="step-num">3</div><p>Confirmez<br>votre réservation</p></div>
+    </div>
+  </section>
+
+  <section class="infos-section">
+    <div class="infos-container">
+      <div class="infos-left">
+        <div class="label">INFOS PRATIQUES</div>
+        <h2>Nous trouver</h2>
+        <p>Situé au cœur de la médina d’Essaouira, Tawrirte vous accueille dans un cadre authentique et chaleureux.</p>
+        <div class="info-item"><span>📍</span><div>Rue d’Oujda, Essaouira</div></div>
+        <div class="info-item"><span>📞</span><div>06 28 25 97 54</div></div>
+        <div class="info-item"><span>🕐</span><div>Ouvert tous les jours<br>de : 11h00 à 23h00</div></div>
+        <a href="https://maps.google.com" target="_blank" class="btn-map">VOIR SUR LA CARTE →</a>
+      </div>
+      <div class="infos-images">
+        <img src="info-facade.jpg" alt="Façade Tawrirte">
+        <img src="info-interieur.jpg" alt="Intérieur">
+        <img src="info-terrasse.jpg" alt="Terrasse">
+      </div>
+      <div class="map-box">
+        <img src="map-essaouira.jpg" alt="Carte Essaouira">
+        <div class="map-overlay"><span>📍 Tawrirte Café & Restaurant</span><a href="https://maps.google.com" target="_blank">Voir sur Google Maps →</a></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" id="contact">
+    <div class="footer-grid">
+      <div><div class="footer-logo">TAWRIRTE<span>Café & Restaurant</span><div class="city">Essaouira</div></div></div>
+      <div><h4>Liens rapides</h4><ul><li><a href="index.html">Accueil</a></li><li><a href="restaurant.html">Le Restaurant</a></li><li><a href="carte.html">La Carte</a></li><li><a href="galerie.html">Galerie</a></li><li><a href="reservation.html">Réservation</a></li></ul></div>
+      <div><h4>Nos catégories</h4><ul><li><a href="carte.html">Entrées</a></li><li><a href="carte.html">Plats marocains</a></li><li><a href="carte.html">Tajines</a></li><li><a href="carte.html">Couscous</a></li><li><a href="carte.html">Poissons & Fruits de mer</a></li><li><a href="carte.html">Desserts</a></li><li><a href="carte.html">Boissons</a></li></ul></div>
+      <div class="contact-info"><h4>Contactez-nous</h4><p>📞 06 28 25 97 54</p><p>📍 Rue d’Oujda, Essaouira</p><p>🕐 Ouvert tous les jours<br>de : 11h00 à 23h00</p><div class="socials"><a href="#">f</a><a href="#">ig</a></div></div>
+    </div>
+    <div class="footer-bottom">© 2025 Tawrirte Café & Restaurant. Tous droits réservés.</div>
+  </footer>
+
+  <script>
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 30));
+    const menuToggle = document.getElementById('menuToggle');
+    const nav = document.getElementById('nav');
+    menuToggle.addEventListener('click', () => nav.classList.toggle('open'));
+    document.querySelectorAll('.nav a').forEach(link => link.addEventListener('click', () => nav.classList.remove('open')));
+    document.getElementById('reservationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Merci ! Votre demande de réservation a bien été envoyée. Nous vous confirmerons rapidement par téléphone ou WhatsApp.');
+      this.reset();
+    });
+  </script>
+</body>
+</html>

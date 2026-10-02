@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>La Carte – Tawrirte | Essaouira</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: #f8f4ef; color: #2c2c2c; line-height: 1.6; overflow-x: hidden; }
+    img { max-width: 100%; height: auto; display: block; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; font-family: inherit; }
+    :root { --blue: #1a4b7c; --blue-dark: #0f2f4d; --cream: #f8f4ef; --text: #2c2c2c; --text-light: #5a5a5a; --white: #ffffff; --shadow: 0 10px 28px rgba(0,0,0,0.08); --radius: 14px; }
+    .header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(248,244,239,0.96); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(0,0,0,0.05); transition: box-shadow 0.3s; }
+    .header.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+    .header-inner { max-width: 1280px; margin: 0 auto; padding: 0 28px; height: 74px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 600; color: var(--blue-dark); letter-spacing: 0.5px; line-height: 1.15; }
+    .logo span { display: block; font-size: 0.62rem; font-weight: 400; letter-spacing: 1.8px; color: var(--text-light); text-transform: uppercase; }
+    .nav { display: flex; align-items: center; gap: 32px; }
+    .nav a { font-size: 0.88rem; font-weight: 500; color: var(--text); position: relative; transition: color 0.2s; }
+    .nav a:hover { color: var(--blue); }
+    .nav a.active { color: var(--blue); }
+    .nav a.active::after { content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 28px; height: 2px; background: var(--blue); border-radius: 2px; }
+    .btn-reserve { background: var(--blue); color: white; padding: 11px 22px; border-radius: 7px; font-size: 0.85rem; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; }
+    .btn-reserve:hover { background: var(--blue-dark); transform: translateY(-1px); }
+    .menu-toggle { display: none; background: none; font-size: 1.55rem; color: var(--blue-dark); }
+    .hero { position: relative; height: 78vh; min-height: 520px; margin-top: 74px; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: url('hero-carte.jpg') center/cover no-repeat; background-color: #1a3a5c; }
+    .hero-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(100deg, rgba(12,28,48,0.82) 0%, rgba(12,28,48,0.4) 50%, rgba(12,28,48,0.15) 100%); }
+    .hero-content { position: relative; z-index: 2; max-width: 1280px; margin: 0 auto; padding: 0 28px; height: 100%; display: flex; flex-direction: column; justify-content: center; color: white; }
+    .hero-tag { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.3rem; opacity: 0.95; margin-bottom: 6px; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(3.2rem, 7vw, 5rem); font-weight: 500; line-height: 1.05; margin-bottom: 18px; }
+    .hero p { font-size: 1.1rem; max-width: 420px; opacity: 0.92; font-weight: 300; }
+    .hero-badge { position: absolute; bottom: 40px; right: 40px; font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.3rem; color: white; opacity: 0.9; writing-mode: vertical-rl; transform: rotate(180deg); }
+    .main-carte { max-width: 1280px; margin: 0 auto; padding: 50px 28px 80px; display: grid; grid-template-columns: 220px 1fr; gap: 40px; align-items: start; }
+    .sidebar { position: sticky; top: 100px; background: white; border-radius: 20px; border: 1.5px solid #e5ddd0; padding: 18px 12px; box-shadow: var(--shadow); }
+    .sidebar-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 10px; font-size: 0.92rem; font-weight: 500; color: var(--text); transition: all 0.2s; cursor: pointer; margin-bottom: 4px; }
+    .sidebar-item:hover { background: #f5f0e8; color: var(--blue); }
+    .sidebar-item.active { background: var(--blue); color: white; }
+    .content { min-width: 0; }
+    .section-header { display: flex; align-items: baseline; gap: 14px; margin-bottom: 28px; }
+    .section-header .label { font-size: 0.75rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--blue); }
+    .section-header h2 { font-family: 'Playfair Display', serif; font-size: 1.9rem; font-weight: 500; color: var(--blue-dark); }
+    .section-header h2::after { content: ''; display: inline-block; width: 40px; height: 2px; background: var(--blue); margin-left: 12px; vertical-align: middle; }
+    .entrees-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-bottom: 60px; }
+    .dish-card { background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); transition: transform 0.25s, box-shadow 0.25s; }
+    .dish-card:hover { transform: translateY(-5px); box-shadow: 0 16px 36px rgba(0,0,0,0.12); }
+    .dish-card img { width: 100%; height: 180px; object-fit: cover; background: #e8dfd2; }
+    .dish-card-body { padding: 16px 18px 20px; }
+    .dish-card h3 { font-size: 1.05rem; font-weight: 600; color: var(--blue-dark); margin-bottom: 6px; }
+    .dish-card p { font-size: 0.86rem; color: var(--text-light); margin-bottom: 12px; line-height: 1.45; }
+    .dish-meta { display: flex; align-items: center; justify-content: space-between; }
+    .tag { font-size: 0.72rem; background: #f0e9df; color: var(--text-light); padding: 4px 10px; border-radius: 20px; }
+    .arrow { color: var(--blue); font-size: 1.1rem; transition: transform 0.2s; }
+    .dish-card:hover .arrow { transform: translateX(4px); }
+    .featured { display: grid; grid-template-columns: 1.1fr 1fr; gap: 30px; margin-bottom: 70px; align-items: center; }
+    .featured-img { position: relative; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); }
+    .featured-img img { width: 100%; height: 380px; object-fit: cover; background: #e0d6c8; }
+    .featured-text { position: absolute; bottom: 0; left: 0; right: 0; padding: 30px; background: linear-gradient(transparent, rgba(0,0,0,0.7)); color: white; }
+    .featured-text h3 { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.8rem; margin-bottom: 8px; }
+    .featured-text p { font-size: 0.95rem; opacity: 0.9; max-width: 280px; }
+    .plats-box { background: white; border-radius: 18px; padding: 28px 30px; box-shadow: var(--shadow); border: 1px solid #ebe4d8; }
+    .plats-box .section-header { margin-bottom: 22px; }
+    .plat-item { display: flex; align-items: center; gap: 18px; padding: 16px 0; border-bottom: 1px solid #f0e9df; transition: background 0.2s; }
+    .plat-item:last-child { border-bottom: none; }
+    .plat-item:hover { background: #faf7f2; margin: 0 -12px; padding-left: 12px; padding-right: 12px; border-radius: 10px; }
+    .plat-item img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; background: #e8dfd2; flex-shrink: 0; }
+    .plat-info { flex: 1; }
+    .plat-info h4 { font-size: 1rem; font-weight: 600; color: var(--blue-dark); margin-bottom: 3px; }
+    .plat-info p { font-size: 0.85rem; color: var(--text-light); }
+    .plat-info .tag { margin-top: 6px; display: inline-block; }
+    .poissons { margin-top: 70px; }
+    .poissons-grid { display: grid; grid-template-columns: 1fr 1.3fr 0.9fr; gap: 24px; align-items: start; }
+    .poisson-list .plat-item { background: white; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; border: 1px solid #ebe4d8; box-shadow: 0 4px 14px rgba(0,0,0,0.04); }
+    .poisson-list .plat-item:last-child { margin-bottom: 0; }
+    .poisson-img { border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }
+    .poisson-img img { width: 100%; height: 320px; object-fit: cover; background: #e0d6c8; }
+    .terrasse-cta { background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.45)), url('cta-terrasse.jpg') center/cover no-repeat; border-radius: 16px; height: 320px; display: flex; flex-direction: column; justify-content: flex-end; padding: 24px; color: white; box-shadow: var(--shadow); }
+    .terrasse-cta h3 { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.5rem; margin-bottom: 14px; line-height: 1.25; }
+    .btn-outline-white { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.7); color: white; padding: 10px 18px; border-radius: 7px; font-size: 0.88rem; font-weight: 500; transition: all 0.2s; width: fit-content; }
+    .btn-outline-white:hover { background: white; color: var(--blue-dark); }
+    .footer { background: var(--blue-dark); color: rgba(255,255,255,0.85); padding: 55px 28px 26px; }
+    .footer-grid { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1.2fr 1.3fr; gap: 40px; }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: white; margin-bottom: 4px; }
+    .footer-logo span { display: block; font-size: 0.68rem; font-weight: 400; opacity: 0.7; letter-spacing: 1.2px; }
+    .footer-logo .city { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1rem; margin-top: 10px; opacity: 0.85; }
+    .footer h4 { color: white; font-size: 0.95rem; margin-bottom: 16px; font-weight: 600; }
+    .footer ul { list-style: none; }
+    .footer li { margin-bottom: 9px; }
+    .footer a { font-size: 0.9rem; opacity: 0.8; transition: opacity 0.2s; }
+    .footer a:hover { opacity: 1; }
+    .contact-info p { font-size: 0.9rem; margin-bottom: 11px; display: flex; align-items: flex-start; gap: 10px; }
+    .socials { display: flex; gap: 12px; margin-top: 16px; }
+    .socials a { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,0.28); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; transition: all 0.2s; }
+    .socials a:hover { background: white; color: var(--blue-dark); }
+    .footer-bottom { max-width: 1180px; margin: 36px auto 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.12); font-size: 0.8rem; opacity: 0.55; text-align: center; }
+    @media (max-width: 1100px) {
+      .main-carte { grid-template-columns: 180px 1fr; gap: 28px; }
+      .entrees-grid { grid-template-columns: repeat(2, 1fr); }
+      .featured { grid-template-columns: 1fr; }
+      .poissons-grid { grid-template-columns: 1fr 1fr; }
+      .terrasse-cta { grid-column: span 2; height: 240px; }
+    }
+    @media (max-width: 800px) {
+      .nav { display: none; }
+      .menu-toggle { display: block; }
+      .nav.open { display: flex; flex-direction: column; position: absolute; top: 74px; left: 0; right: 0; background: white; padding: 24px 28px; gap: 18px; box-shadow: 0 12px 30px rgba(0,0,0,0.1); }
+      .main-carte { grid-template-columns: 1fr; }
+      .sidebar { position: static; display: flex; overflow-x: auto; gap: 8px; padding: 12px; border-radius: 14px; }
+      .sidebar-item { white-space: nowrap; margin-bottom: 0; }
+      .entrees-grid { grid-template-columns: 1fr; }
+      .poissons-grid { grid-template-columns: 1fr; }
+      .terrasse-cta { grid-column: auto; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 30px; }
+      .hero-badge { display: none; }
+    }
+    @media (max-width: 520px) { .footer-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header class="header" id="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">TAWRIRTE<span>Café & Restaurant</span></a>
+      <nav class="nav" id="nav">
+        <a href="index.html">Accueil</a>
+        <a href="restaurant.html">Le Restaurant</a>
+        <a href="carte.html" class="active">La Carte</a>
+        <a href="galerie.html">Galerie</a>
+        <a href="reservation.html">Réservation</a>
+      </nav>
+      <a href="reservation.html" class="btn-reserve">📅 RÉSERVER</a>
+      <button class="menu-toggle" id="menuToggle">☰</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-tag">Notre</div>
+      <h1>Carte</h1>
+      <p>Une cuisine marocaine authentique, préparée avec passion à Essaouira.</p>
+    </div>
+    <div class="hero-badge">Saveurs Marocaines</div>
+  </section>
+
+  <div class="main-carte">
+    <aside class="sidebar">
+      <div class="sidebar-item active" data-cat="entrees"><span class="icon">🍲</span> Entrées</div>
+      <div class="sidebar-item" data-cat="plats"><span class="icon">🍛</span> Plats marocains</div>
+      <div class="sidebar-item" data-cat="tajines"><span class="icon">🥘</span> Tajines</div>
+      <div class="sidebar-item" data-cat="couscous"><span class="icon">🥣</span> Couscous</div>
+      <div class="sidebar-item" data-cat="poissons"><span class="icon">🐟</span> Poissons & Fruits de mer</div>
+      <div class="sidebar-item" data-cat="desserts"><span class="icon">🍮</span> Desserts</div>
+      <div class="sidebar-item" data-cat="boissons"><span class="icon">🍵</span> Boissons</div>
+    </aside>
+
+    <div class="content">
+      <div class="section-header"><span class="label">ENTRÉES</span><h2>Nos entrées</h2></div>
+      <div class="entrees-grid">
+        <div class="dish-card"><img src="entree-couscous.jpg" alt="Couscous Royal"><div class="dish-card-body"><h3>Couscous Royal</h3><p>Légumes frais, épices traditionnelles et amandes.</p><div class="dish-meta"><span class="tag">Entrée</span><span class="arrow">→</span></div></div></div>
+        <div class="dish-card"><img src="entree-salade.jpg" alt="Salade de la mer"><div class="dish-card-body"><h3>Salade de la mer</h3><p>Fruits de mer frais, huile d’olive et citron.</p><div class="dish-meta"><span class="tag">Entrée</span><span class="arrow">→</span></div></div></div>
+        <div class="dish-card"><img src="entree-bricks.jpg" alt="Bricks"><div class="dish-card-body"><h3>Bricks</h3><p>Feuilles de brick farcies au choix.</p><div class="dish-meta"><span class="tag">Entrée</span><span class="arrow">→</span></div></div></div>
+      </div>
+
+      <div class="featured">
+        <div class="featured-img">
+          <img src="featured-tajine.jpg" alt="Les plats traditionnels">
+          <div class="featured-text"><h3>Les plats traditionnels</h3><p>Des recettes transmises de génération en génération.</p></div>
+        </div>
+        <div class="plats-box">
+          <div class="section-header"><span class="label">PLATS MAROCAINS</span><h2>Nos plats marocains</h2></div>
+          <div class="plat-item"><img src="plat-legumes.jpg" alt="Tajine de légumes"><div class="plat-info"><h4>Tajine de légumes</h4><p>Légumes de saison, épices marocaines.</p><span class="tag">Plat marocain</span></div><span class="arrow">→</span></div>
+          <div class="plat-item"><img src="plat-poulet.jpg" alt="Tajine de poulet"><div class="plat-info"><h4>Tajine de poulet</h4><p>Poulet tendre, citron confit et olives.</p><span class="tag">Plat marocain</span></div><span class="arrow">→</span></div>
+          <div class="plat-item"><img src="plat-agneau.jpg" alt="Tajine d’agneau"><div class="plat-info"><h4>Tajine d’agneau</h4><p>Agneau mijoté aux épices.</p><span class="tag">Plat marocain</span></div><span class="arrow">→</span></div>
+        </div>
+      </div>
+
+      <div class="poissons">
+        <div class="section-header"><span class="label">POISSONS & FRUITS DE MER</span><h2>La fraîcheur de l’océan</h2></div>
+        <div class="poissons-grid">
+          <div class="poisson-list">
+            <div class="plat-item"><img src="poisson-grille.jpg" alt="Poisson grillé"><div class="plat-info"><h4>Poisson grillé</h4><p>Poisson frais du jour, citron et herbes.</p><span class="tag">Poisson</span></div><span class="arrow">→</span></div>
+            <div class="plat-item"><img src="fruits-mer.jpg" alt="Fruits de mer"><div class="plat-info"><h4>Fruits de mer</h4><p>Mélange de fruits de mer, sauce maison.</p><span class="tag">Poisson</span></div><span class="arrow">→</span></div>
+            <div class="plat-item"><img src="crevettes.jpg" alt="Crevettes à la marocaine"><div class="plat-info"><h4>Crevettes à la marocaine</h4><p>Crevettes, ail, persil et épices.</p><span class="tag">Poisson</span></div><span class="arrow">→</span></div>
+          </div>
+          <div class="poisson-img"><img src="poisson-assiette.jpg" alt="Poisson frais"></div>
+          <div class="terrasse-cta">
+            <h3>Découvrez aussi<br>notre terrasse</h3>
+            <a href="galerie.html" class="btn-outline-white">VOIR LA GALERIE →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer" id="contact">
+    <div class="footer-grid">
+      <div><div class="footer-logo">TAWRIRTE<span>Café & Restaurant</span><div class="city">Essaouira</div></div></div>
+      <div><h4>Liens rapides</h4><ul><li><a href="index.html">Accueil</a></li><li><a href="restaurant.html">Le Restaurant</a></li><li><a href="carte.html">Carte</a></li><li><a href="galerie.html">Galerie</a></li><li><a href="reservation.html">Réservation</a></li></ul></div>
+      <div><h4>Nos catégories</h4><ul><li><a href="#">Entrées</a></li><li><a href="#">Plats marocains</a></li><li><a href="#">Tajines</a></li><li><a href="#">Couscous</a></li><li><a href="#">Poissons & Fruits de mer</a></li><li><a href="#">Desserts</a></li><li><a href="#">Boissons</a></li></ul></div>
+      <div class="contact-info"><h4>Contactez-nous</h4><p>📞 06 28 25 97 54</p><p>📍 Rue d’Oujda, Essaouira</p><p>🕐 Ouvert tous les jours<br>de : 11h00 à 23h00</p><div class="socials"><a href="#">f</a><a href="#">ig</a></div></div>
+    </div>
+    <div class="footer-bottom">© 2025 Tawrirte Café & Restaurant. Tous droits réservés.</div>
+  </footer>
+
+  <script>
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 30));
+    const menuToggle = document.getElementById('menuToggle');
+    const nav = document.getElementById('nav');
+    menuToggle.addEventListener('click', () => nav.classList.toggle('open'));
+    document.querySelectorAll('.nav a').forEach(link => link.addEventListener('click', () => nav.classList.remove('open')));
+    document.querySelectorAll('.sidebar-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

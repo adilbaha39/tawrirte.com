@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Le Restaurant – Tawrirte | Essaouira</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: #f8f4ef; color: #2c2c2c; line-height: 1.65; overflow-x: hidden; }
+    img { max-width: 100%; height: auto; display: block; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; font-family: inherit; }
+    :root { --blue: #1a4b7c; --blue-dark: #0f2f4d; --cream: #f8f4ef; --text: #2c2c2c; --text-light: #5a5a5a; --white: #ffffff; --shadow: 0 12px 32px rgba(0,0,0,0.09); --radius: 14px; }
+    .header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(248,244,239,0.96); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(0,0,0,0.05); transition: box-shadow 0.3s; }
+    .header.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+    .header-inner { max-width: 1280px; margin: 0 auto; padding: 0 28px; height: 74px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 600; color: var(--blue-dark); letter-spacing: 0.5px; line-height: 1.15; }
+    .logo span { display: block; font-size: 0.62rem; font-weight: 400; letter-spacing: 1.8px; color: var(--text-light); text-transform: uppercase; }
+    .nav { display: flex; align-items: center; gap: 32px; }
+    .nav a { font-size: 0.88rem; font-weight: 500; color: var(--text); position: relative; transition: color 0.2s; }
+    .nav a:hover { color: var(--blue); }
+    .nav a.active { color: var(--blue); }
+    .nav a.active::after { content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 28px; height: 2px; background: var(--blue); border-radius: 2px; }
+    .btn-reserve { background: var(--blue); color: white; padding: 11px 22px; border-radius: 7px; font-size: 0.85rem; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; }
+    .btn-reserve:hover { background: var(--blue-dark); transform: translateY(-1px); }
+    .menu-toggle { display: none; background: none; font-size: 1.55rem; color: var(--blue-dark); }
+    .hero { position: relative; height: 88vh; min-height: 580px; margin-top: 74px; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: url('hero-restaurant.jpg') center/cover no-repeat; background-color: #1a3a5c; }
+    .hero-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(105deg, rgba(12,28,48,0.78) 0%, rgba(12,28,48,0.35) 55%, rgba(12,28,48,0.15) 100%); }
+    .hero-content { position: relative; z-index: 2; max-width: 1280px; margin: 0 auto; padding: 0 28px; height: 100%; display: flex; flex-direction: column; justify-content: center; color: white; }
+    .hero-tag { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.25rem; opacity: 0.92; margin-bottom: 10px; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5.2vw, 3.9rem); font-weight: 500; line-height: 1.18; max-width: 620px; margin-bottom: 22px; }
+    .hero p { font-size: 1.05rem; max-width: 460px; opacity: 0.92; font-weight: 300; line-height: 1.6; }
+    .hero-badge { position: absolute; bottom: 48px; right: 48px; font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.35rem; color: white; opacity: 0.9; writing-mode: vertical-rl; transform: rotate(180deg); letter-spacing: 1px; }
+    .section { padding: 90px 28px; }
+    .container { max-width: 1180px; margin: 0 auto; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: 2.15rem; font-weight: 500; color: var(--blue-dark); margin-bottom: 16px; position: relative; }
+    .section-title::before { content: ''; display: block; width: 36px; height: 3px; background: var(--blue); margin-bottom: 16px; border-radius: 2px; }
+    .section-text { color: var(--text-light); font-size: 1rem; line-height: 1.7; max-width: 520px; }
+    .link-arrow { display: inline-flex; align-items: center; gap: 7px; color: var(--blue); font-weight: 500; font-size: 0.92rem; margin-top: 22px; transition: gap 0.2s; }
+    .link-arrow:hover { gap: 12px; }
+    .histoire { background: var(--cream); }
+    .histoire-grid { display: grid; grid-template-columns: 1fr 1.35fr; gap: 50px; align-items: center; }
+    .histoire-images { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .histoire-images img { width: 100%; height: 320px; object-fit: cover; border-radius: 18px; background: #e0d6c8; box-shadow: var(--shadow); }
+    .histoire-images img:first-child { border-radius: 18px 60px 18px 60px; }
+    .histoire-images img:last-child { border-radius: 60px 18px 60px 18px; margin-top: 30px; }
+    .atouts { background: white; padding: 80px 28px 90px; }
+    .atouts-title { text-align: center; margin-bottom: 50px; }
+    .atouts-title .section-title { display: inline-block; }
+    .atouts-title .section-title::before { margin-left: auto; margin-right: auto; }
+    .atouts-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 22px; }
+    .atout-card { text-align: center; transition: transform 0.25s; }
+    .atout-card:hover { transform: translateY(-6px); }
+    .atout-img { width: 100%; height: 160px; object-fit: cover; border-radius: 18px; background: #e8dfd2; margin-bottom: 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.07); }
+    .atout-icon { font-size: 1.35rem; margin-bottom: 8px; display: block; }
+    .atout-card h3 { font-size: 0.98rem; font-weight: 600; color: var(--blue-dark); margin-bottom: 6px; }
+    .atout-card p { font-size: 0.84rem; color: var(--text-light); line-height: 1.45; }
+    .terrasse { position: relative; padding: 0; overflow: hidden; }
+    .terrasse-grid { display: grid; grid-template-columns: 1.25fr 1fr; min-height: 520px; }
+    .terrasse-img { background: url('terrasse.jpg') center/cover no-repeat; background-color: #2a4a6a; min-height: 420px; position: relative; }
+    .terrasse-content { background: var(--cream); padding: 70px 50px; display: flex; flex-direction: column; justify-content: center; position: relative; }
+    .terrasse-content .section-title { font-size: 2rem; }
+    .terrasse-content p { color: var(--text-light); margin: 14px 0 28px; max-width: 380px; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--blue); color: white; padding: 14px 26px; border-radius: 7px; font-weight: 500; font-size: 0.95rem; transition: all 0.2s; width: fit-content; }
+    .btn-primary:hover { background: var(--blue-dark); transform: translateY(-2px); }
+    .equipe { background: var(--cream); padding: 90px 28px; }
+    .equipe-grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: 50px; align-items: center; }
+    .equipe-images { display: grid; grid-template-columns: 1.1fr 1fr 0.9fr; gap: 14px; }
+    .equipe-images img { width: 100%; height: 240px; object-fit: cover; border-radius: 16px; background: #e0d6c8; box-shadow: var(--shadow); }
+    .equipe-images img:nth-child(2) { margin-top: 28px; }
+    .equipe-images img:nth-child(3) { margin-top: 14px; border-radius: 16px 40px 16px 40px; }
+    .footer { background: var(--blue-dark); color: rgba(255,255,255,0.85); padding: 60px 28px 28px; }
+    .footer-grid { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1.2fr 1.3fr; gap: 40px; }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: white; margin-bottom: 4px; }
+    .footer-logo span { display: block; font-size: 0.68rem; font-weight: 400; opacity: 0.7; letter-spacing: 1.2px; }
+    .footer-logo .city { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1rem; margin-top: 10px; opacity: 0.85; }
+    .footer h4 { color: white; font-size: 0.95rem; margin-bottom: 18px; font-weight: 600; }
+    .footer ul { list-style: none; }
+    .footer li { margin-bottom: 9px; }
+    .footer a { font-size: 0.9rem; opacity: 0.8; transition: opacity 0.2s; }
+    .footer a:hover { opacity: 1; }
+    .contact-info p { font-size: 0.9rem; margin-bottom: 11px; display: flex; align-items: flex-start; gap: 10px; }
+    .socials { display: flex; gap: 12px; margin-top: 18px; }
+    .socials a { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,0.28); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; transition: all 0.2s; }
+    .socials a:hover { background: white; color: var(--blue-dark); }
+    .footer-bottom { max-width: 1180px; margin: 40px auto 0; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.12); font-size: 0.8rem; opacity: 0.55; text-align: center; }
+    @media (max-width: 1024px) {
+      .atouts-grid { grid-template-columns: repeat(3, 1fr); gap: 28px; }
+      .histoire-grid, .equipe-grid, .terrasse-grid { grid-template-columns: 1fr; }
+      .histoire-images img { height: 260px; }
+      .equipe-images { grid-template-columns: 1fr 1fr 1fr; }
+      .terrasse-content { padding: 50px 32px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    }
+    @media (max-width: 768px) {
+      .nav { display: none; }
+      .menu-toggle { display: block; }
+      .nav.open { display: flex; flex-direction: column; position: absolute; top: 74px; left: 0; right: 0; background: white; padding: 24px 28px; gap: 18px; box-shadow: 0 12px 30px rgba(0,0,0,0.1); }
+      .hero { height: 78vh; min-height: 500px; }
+      .hero-badge { display: none; }
+      .atouts-grid { grid-template-columns: 1fr 1fr; }
+      .equipe-images { grid-template-columns: 1fr; }
+      .equipe-images img { height: 220px; margin-top: 0 !important; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 520px) { .atouts-grid { grid-template-columns: 1fr; max-width: 320px; margin: 0 auto; } }
+  </style>
+</head>
+<body>
+  <header class="header" id="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">TAWRIRTE<span>Café & Restaurant</span></a>
+      <nav class="nav" id="nav">
+        <a href="index.html">Accueil</a>
+        <a href="restaurant.html" class="active">Le Restaurant</a>
+        <a href="carte.html">La Carte</a>
+        <a href="galerie.html">Galerie</a>
+        <a href="reservation.html">Réservation</a>
+      </nav>
+      <a href="reservation.html" class="btn-reserve">📅 RÉSERVER</a>
+      <button class="menu-toggle" id="menuToggle">☰</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-tag">Le Restaurant</div>
+      <h1>Une rencontre<br>entre tradition<br>et convivialité</h1>
+      <p>Au cœur d’Essaouira, Tawrirte vous invite à vivre une expérience culinaire authentique, dans un cadre chaleureux et plein de charme.</p>
+    </div>
+    <div class="hero-badge">Une ambiance unique</div>
+  </section>
+
+  <section class="section histoire">
+    <div class="container">
+      <div class="histoire-grid">
+        <div>
+          <h2 class="section-title">Notre histoire</h2>
+          <p class="section-text">Tawrirte, c’est plus qu’un restaurant, c’est une histoire de passion pour la cuisine marocaine et l’authenticité d’Essaouira.</p>
+          <p class="section-text" style="margin-top:16px;">Depuis toujours, nous partageons des recettes traditionnelles transmises de génération en génération, préparées avec des produits frais et locaux.</p>
+          <a href="#" class="link-arrow">DÉCOUVRIR NOTRE UNIVERS →</a>
+        </div>
+        <div class="histoire-images">
+          <img src="histoire-1.jpg" alt="Façade et menu Tawrirte">
+          <img src="histoire-2.jpg" alt="Chef en cuisine">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="atouts">
+    <div class="container">
+      <div class="atouts-title"><h2 class="section-title">Nos atouts</h2></div>
+      <div class="atouts-grid">
+        <div class="atout-card"><img src="atout-cuisine.jpg" alt="Cuisine authentique" class="atout-img"><span class="atout-icon">🍲</span><h3>Cuisine authentique</h3><p>Des recettes traditionnelles marocaines.</p></div>
+        <div class="atout-card"><img src="atout-produits.jpg" alt="Produits frais" class="atout-img"><span class="atout-icon">🐟</span><h3>Produits frais</h3><p>Des ingrédients de qualité, locaux et de saison.</p></div>
+        <div class="atout-card"><img src="atout-cadre.jpg" alt="Cadre chaleureux" class="atout-img"><span class="atout-icon">🏠</span><h3>Cadre chaleureux</h3><p>Une atmosphère conviviale et authentique.</p></div>
+        <div class="atout-card"><img src="atout-terrasse.jpg" alt="Terrasse & Rooftop" class="atout-img"><span class="atout-icon">🌅</span><h3>Terrasse & Rooftop</h3><p>Profitez d’une vue exceptionnelle sur Essaouira.</p></div>
+        <div class="atout-card"><img src="atout-savoir.jpg" alt="Savoir-faire marocain" class="atout-img"><span class="atout-icon">🍵</span><h3>Savoir-faire marocain</h3><p>Des plats préparés avec passion et tradition.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="terrasse" id="reserver">
+    <div class="terrasse-grid">
+      <div class="terrasse-img"></div>
+      <div class="terrasse-content">
+        <h2 class="section-title">La terrasse & Rooftop</h2>
+        <p>Prenez place sur notre terrasse pour savourer vos plats tout en admirant la beauté d’Essaouira.</p>
+        <a href="reservation.html" class="btn-primary">RÉSERVER UNE TABLE →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section equipe">
+    <div class="container">
+      <div class="equipe-grid">
+        <div>
+          <h2 class="section-title">Notre équipe</h2>
+          <p class="section-text">Une équipe passionnée, à votre service, pour vous faire vivre une expérience inoubliable.</p>
+          <a href="#" class="link-arrow">EN SAVOIR PLUS →</a>
+        </div>
+        <div class="equipe-images">
+          <img src="equipe-1.jpg" alt="Équipe Tawrirte">
+          <img src="equipe-2.jpg" alt="Chef en cuisine">
+          <img src="equipe-3.jpg" alt="Cuisine Marocaine">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" id="contact">
+    <div class="footer-grid">
+      <div><div class="footer-logo">TAWRIRTE<span>Café & Restaurant</span><div class="city">Essaouira</div></div></div>
+      <div><h4>Liens rapides</h4><ul><li><a href="index.html">Accueil</a></li><li><a href="restaurant.html">Le Restaurant</a></li><li><a href="carte.html">La Carte</a></li><li><a href="galerie.html">Galerie</a></li><li><a href="reservation.html">Réservation</a></li></ul></div>
+      <div><h4>Nos catégories</h4><ul><li><a href="carte.html">Entrées</a></li><li><a href="carte.html">Plats marocains</a></li><li><a href="carte.html">Tajines</a></li><li><a href="carte.html">Couscous</a></li><li><a href="carte.html">Poissons & Fruits de mer</a></li><li><a href="carte.html">Desserts</a></li><li><a href="carte.html">Boissons</a></li></ul></div>
+      <div class="contact-info"><h4>Contactez-nous</h4><p>📞 06 28 25 97 54</p><p>📍 Rue d’Oujda, Essaouira</p><p>🕐 Ouvert tous les jours<br>de : 11h00 à 23h00</p><div class="socials"><a href="#">f</a><a href="#">ig</a></div></div>
+    </div>
+    <div class="footer-bottom">© 2025 Tawrirte Café & Restaurant. Tous droits réservés.</div>
+  </footer>
+
+  <script>
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 30));
+    const menuToggle = document.getElementById('menuToggle');
+    const nav = document.getElementById('nav');
+    menuToggle.addEventListener('click', () => nav.classList.toggle('open'));
+    document.querySelectorAll('.nav a').forEach(link => link.addEventListener('click', () => nav.classList.remove('open')));
+  </script>
+</body>
+</html>

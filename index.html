@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tawrirte – Café & Restaurant | Essaouira</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: #f8f4ef; color: #2c2c2c; line-height: 1.6; overflow-x: hidden; }
+    img { max-width: 100%; height: auto; display: block; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; border: none; font-family: inherit; }
+    :root {
+      --blue: #1a4b7c; --blue-dark: #0f2f4d; --cream: #f8f4ef; --text: #2c2c2c; --text-light: #5a5a5a; --white: #ffffff;
+      --shadow: 0 10px 30px rgba(0,0,0,0.08); --radius: 12px;
+    }
+    .header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(248,244,239,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.05); transition: all 0.3s; }
+    .header.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    .header-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; height: 72px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.55rem; font-weight: 600; color: var(--blue-dark); letter-spacing: 1px; line-height: 1.1; }
+    .logo span { display: block; font-size: 0.65rem; font-weight: 400; letter-spacing: 2px; color: var(--text-light); text-transform: uppercase; }
+    .nav { display: flex; align-items: center; gap: 28px; }
+    .nav a { font-size: 0.85rem; font-weight: 500; letter-spacing: 0.5px; color: var(--text); position: relative; transition: color 0.2s; }
+    .nav a:hover, .nav a.active { color: var(--blue); }
+    .nav a.active::after { content: ''; position: absolute; bottom: -6px; left: 0; right: 0; height: 2px; background: var(--blue); }
+    .btn-reserve { background: var(--blue); color: white; padding: 10px 22px; border-radius: 6px; font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; gap: 8px; transition: background 0.2s, transform 0.2s; }
+    .btn-reserve:hover { background: var(--blue-dark); transform: translateY(-1px); }
+    .menu-toggle { display: none; background: none; font-size: 1.5rem; color: var(--blue-dark); }
+    .hero { position: relative; height: 92vh; min-height: 620px; margin-top: 72px; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: url('hero-accueil.jpg') center/cover no-repeat; background-color: #1a3a5c; }
+    .hero-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(15,30,50,0.75) 0%, rgba(15,30,50,0.35) 55%, rgba(15,30,50,0.15) 100%); }
+    .hero-content { position: relative; z-index: 2; max-width: 1280px; margin: 0 auto; padding: 0 24px; height: 100%; display: flex; flex-direction: column; justify-content: center; color: white; }
+    .hero-tag { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.1rem; opacity: 0.9; margin-bottom: 8px; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.6rem, 5.5vw, 4.2rem); font-weight: 500; line-height: 1.15; max-width: 580px; margin-bottom: 18px; }
+    .hero p { font-size: 1.05rem; max-width: 420px; opacity: 0.92; margin-bottom: 32px; font-weight: 300; }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-primary { background: var(--blue); color: white; padding: 14px 28px; border-radius: 6px; font-weight: 500; font-size: 0.95rem; transition: all 0.2s; }
+    .btn-primary:hover { background: var(--blue-dark); transform: translateY(-2px); }
+    .btn-outline { background: transparent; color: white; padding: 14px 28px; border-radius: 6px; border: 1.5px solid rgba(255,255,255,0.7); font-weight: 500; font-size: 0.95rem; transition: all 0.2s; }
+    .btn-outline:hover { background: rgba(255,255,255,0.12); border-color: white; }
+    .hero-badge { position: absolute; bottom: 40px; right: 40px; font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.4rem; color: white; opacity: 0.85; writing-mode: vertical-rl; transform: rotate(180deg); }
+    .categories { background: var(--cream); padding: 28px 0; border-bottom: 1px solid rgba(0,0,0,0.04); }
+    .categories-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; display: flex; justify-content: space-between; gap: 12px; overflow-x: auto; scrollbar-width: none; }
+    .categories-inner::-webkit-scrollbar { display: none; }
+    .cat-item { display: flex; flex-direction: column; align-items: center; gap: 10px; min-width: 100px; cursor: pointer; transition: transform 0.2s; }
+    .cat-item:hover { transform: translateY(-4px); }
+    .cat-img { width: 78px; height: 78px; border-radius: 50%; object-fit: cover; border: 3px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: #e8e0d5; }
+    .cat-item span { font-size: 0.78rem; font-weight: 500; color: var(--text); text-align: center; }
+    .section { padding: 80px 24px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 500; color: var(--blue-dark); margin-bottom: 12px; position: relative; }
+    .section-title::before { content: ''; display: block; width: 40px; height: 3px; background: var(--blue); margin-bottom: 14px; }
+    .section-text { color: var(--text-light); max-width: 480px; margin-bottom: 28px; font-size: 1rem; }
+    .cuisine-grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: 50px; align-items: center; }
+    .cuisine-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .cuisine-card { background: white; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: transform 0.25s, box-shadow 0.25s; }
+    .cuisine-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,0.12); }
+    .cuisine-card img { width: 100%; height: 180px; object-fit: cover; background: #e8e0d5; }
+    .cuisine-card-body { padding: 14px 16px 18px; }
+    .cuisine-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 2px; }
+    .cuisine-card p { font-size: 0.8rem; color: var(--text-light); }
+    .link-arrow { display: inline-flex; align-items: center; gap: 6px; color: var(--blue); font-weight: 500; font-size: 0.9rem; margin-top: 8px; transition: gap 0.2s; }
+    .link-arrow:hover { gap: 10px; }
+    .pourquoi { background: white; padding: 0; }
+    .pourquoi-grid { display: grid; grid-template-columns: 1fr 1.1fr; min-height: 520px; }
+    .pourquoi-img { background: url('interior.jpg') center/cover no-repeat; background-color: #2a4a6a; min-height: 400px; }
+    .pourquoi-content { padding: 60px 50px; display: flex; flex-direction: column; justify-content: center; }
+    .features { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 30px; }
+    .feature { display: flex; flex-direction: column; gap: 8px; }
+    .feature-icon { width: 42px; height: 42px; background: var(--cream); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: 4px; }
+    .feature h4 { font-size: 0.95rem; font-weight: 600; color: var(--blue-dark); }
+    .feature p { font-size: 0.85rem; color: var(--text-light); line-height: 1.45; }
+    .steps-section { background: var(--cream); padding: 70px 24px; }
+    .steps-header { text-align: center; margin-bottom: 50px; }
+    .steps-header p { color: var(--text-light); margin-top: 8px; }
+    .steps { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; max-width: 1000px; margin: 0 auto; }
+    .step { flex: 1; min-width: 220px; max-width: 280px; text-align: center; position: relative; }
+    .step-num { width: 48px; height: 48px; background: var(--blue); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 1.1rem; margin: 0 auto 18px; }
+    .step h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; color: var(--blue-dark); }
+    .step p { font-size: 0.9rem; color: var(--text-light); }
+    .step-arrow { position: absolute; top: 20px; right: -30px; font-size: 1.4rem; color: var(--blue); opacity: 0.4; }
+    .gallery { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; }
+    .gallery img { width: 100%; height: 220px; object-fit: cover; background: #d4c9b8; }
+    .gallery-text { background: var(--blue-dark); color: white; display: flex; align-items: center; justify-content: center; padding: 20px; font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.3rem; text-align: center; line-height: 1.4; }
+    .footer { background: var(--blue-dark); color: rgba(255,255,255,0.85); padding: 60px 24px 30px; }
+    .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.3fr; gap: 40px; }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: white; margin-bottom: 6px; }
+    .footer-logo span { display: block; font-size: 0.7rem; font-weight: 400; opacity: 0.7; letter-spacing: 1px; }
+    .footer h4 { color: white; font-size: 0.95rem; margin-bottom: 18px; font-weight: 600; }
+    .footer ul { list-style: none; }
+    .footer li { margin-bottom: 10px; }
+    .footer a { font-size: 0.9rem; opacity: 0.8; transition: opacity 0.2s; }
+    .footer a:hover { opacity: 1; }
+    .contact-info p { font-size: 0.9rem; margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px; }
+    .socials { display: flex; gap: 14px; margin-top: 18px; }
+    .socials a { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .socials a:hover { background: white; color: var(--blue-dark); }
+    .footer-bottom { max-width: 1200px; margin: 40px auto 0; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.12); font-size: 0.8rem; opacity: 0.6; text-align: center; }
+    @media (max-width: 980px) {
+      .cuisine-grid { grid-template-columns: 1fr; }
+      .cuisine-cards { grid-template-columns: repeat(3, 1fr); }
+      .pourquoi-grid { grid-template-columns: 1fr; }
+      .pourquoi-img { min-height: 320px; order: -1; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 30px; }
+      .gallery { grid-template-columns: repeat(3, 1fr); }
+      .gallery img:nth-child(4), .gallery img:nth-child(5) { display: none; }
+    }
+    @media (max-width: 768px) {
+      .nav { display: none; }
+      .menu-toggle { display: block; }
+      .nav.open { display: flex; flex-direction: column; position: absolute; top: 72px; left: 0; right: 0; background: white; padding: 24px; gap: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+      .hero { height: 80vh; min-height: 520px; }
+      .hero-badge { display: none; }
+      .cuisine-cards { grid-template-columns: 1fr; }
+      .features { grid-template-columns: 1fr; }
+      .step-arrow { display: none; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .gallery { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header" id="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">TAWRIRTE<span>Café & Restaurant</span></a>
+      <nav class="nav" id="nav">
+        <a href="index.html" class="active">Accueil</a>
+        <a href="restaurant.html">Le Restaurant</a>
+        <a href="carte.html">La Carte</a>
+        <a href="galerie.html">Galerie</a>
+        <a href="reservation.html">Réservation</a>
+      </nav>
+      <a href="reservation.html" class="btn-reserve">📅 RÉSERVER</a>
+      <button class="menu-toggle" id="menuToggle">☰</button>
+    </div>
+  </header>
+
+  <section class="hero" id="accueil">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-tag">TAWRIRTE</div>
+      <h1>Une table<br>au cœur d’Essaouira</h1>
+      <p>Cuisine marocaine authentique, dans une ambiance chaleureuse et conviviale.</p>
+      <div class="hero-btns">
+        <a href="reservation.html" class="btn-primary">RÉSERVER UNE TABLE</a>
+        <a href="carte.html" class="btn-outline">VOIR LA CARTE →</a>
+      </div>
+    </div>
+    <div class="hero-badge">Saveurs Marocaines</div>
+  </section>
+
+  <section class="categories">
+    <div class="categories-inner">
+      <div class="cat-item"><img src="cat-entrees.jpg" alt="Entrées" class="cat-img"><span>Entrées</span></div>
+      <div class="cat-item"><img src="cat-plats.jpg" alt="Plats marocains" class="cat-img"><span>Plats marocains</span></div>
+      <div class="cat-item"><img src="cat-tajines.jpg" alt="Tajines" class="cat-img"><span>Tajines</span></div>
+      <div class="cat-item"><img src="cat-couscous.jpg" alt="Couscous" class="cat-img"><span>Couscous</span></div>
+      <div class="cat-item"><img src="cat-poissons.jpg" alt="Poissons" class="cat-img"><span>Poissons & Fruits de mer</span></div>
+      <div class="cat-item"><img src="cat-desserts.jpg" alt="Desserts" class="cat-img"><span>Desserts</span></div>
+      <div class="cat-item"><img src="cat-boissons.jpg" alt="Boissons" class="cat-img"><span>Boissons</span></div>
+    </div>
+  </section>
+
+  <section class="section" id="carte">
+    <div class="container">
+      <div class="cuisine-grid">
+        <div>
+          <h2 class="section-title">Notre cuisine</h2>
+          <p class="section-text">Des produits frais, des recettes traditionnelles et tout le goût du Maroc, préparés avec passion par notre équipe.</p>
+          <a href="carte.html" class="link-arrow">DÉCOUVRIR NOTRE CARTE →</a>
+        </div>
+        <div class="cuisine-cards">
+          <div class="cuisine-card"><img src="couscous-royal.jpg" alt="Couscous Royal"><div class="cuisine-card-body"><h3>Couscous Royal</h3><p>Couscous</p></div></div>
+          <div class="cuisine-card"><img src="tajine-marocain.jpg" alt="Tajine Marocain"><div class="cuisine-card-body"><h3>Tajine Marocain</h3><p>Tajines</p></div></div>
+          <div class="cuisine-card"><img src="poisson-frais.jpg" alt="Poisson Frais"><div class="cuisine-card-body"><h3>Poisson Frais</h3><p>Poissons & Fruits de mer</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pourquoi" id="restaurant">
+    <div class="pourquoi-grid">
+      <div class="pourquoi-img"></div>
+      <div class="pourquoi-content">
+        <h2 class="section-title">Pourquoi nous choisir ?</h2>
+        <div class="features">
+          <div class="feature"><div class="feature-icon">👨‍🍳</div><h4>Une cuisine authentique</h4><p>Des recettes traditionnelles et des saveurs vraies.</p></div>
+          <div class="feature"><div class="feature-icon">🍃</div><h4>Des produits frais</h4><p>Sélectionnés chaque jour avec soin.</p></div>
+          <div class="feature"><div class="feature-icon">🏠</div><h4>Une ambiance unique</h4><p>Entre mer, médina et tradition.</p></div>
+          <div class="feature"><div class="feature-icon">☀️</div><h4>Terrasse & Rooftop</h4><p>Profitez d’une vue exceptionnelle sur Essaouira.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="steps-section" id="reserver">
+    <div class="container">
+      <div class="steps-header">
+        <h2 class="section-title" style="text-align:center; display:inline-block;">Réserver en 3 étapes</h2>
+        <p>Une expérience simple et rapide</p>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><h3>Choisissez votre expérience</h3><p>Dîner en salle ou sur la terrasse</p><span class="step-arrow">→</span></div>
+        <div class="step"><div class="step-num">2</div><h3>Sélectionnez la date et l’heure</h3><p>Selon vos envies.</p><span class="step-arrow">→</span></div>
+        <div class="step"><div class="step-num">3</div><h3>Confirmez votre réservation</h3><p>Et profitez de votre moment.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery" id="galerie">
+    <img src="gal1.jpg" alt="Galerie 1">
+    <img src="gal2.jpg" alt="Galerie 2">
+    <img src="gal3.jpg" alt="Galerie 3">
+    <img src="gal4.jpg" alt="Galerie 4">
+    <div class="gallery-text">Un lieu<br>à découvrir<br>et à savourer</div>
+  </section>
+
+  <footer class="footer" id="contact">
+    <div class="footer-grid">
+      <div><div class="footer-logo">TAWRIRTE<span>Café & Restaurant</span></div></div>
+      <div><h4>Liens rapides</h4><ul><li><a href="index.html">Accueil</a></li><li><a href="restaurant.html">Le Restaurant</a></li><li><a href="carte.html">Carte</a></li><li><a href="galerie.html">Galerie</a></li><li><a href="reservation.html">Réservation</a></li></ul></div>
+      <div><h4>Nos catégories</h4><ul><li><a href="carte.html">Entrées</a></li><li><a href="carte.html">Plats marocains</a></li><li><a href="carte.html">Tajines</a></li><li><a href="carte.html">Couscous</a></li><li><a href="carte.html">Poissons & Fruits de mer</a></li><li><a href="carte.html">Desserts</a></li><li><a href="carte.html">Boissons</a></li></ul></div>
+      <div class="contact-info"><h4>Contactez-nous</h4><p>📞 06 28 25 97 54</p><p>📍 Rue d’Oujda, Essaouira</p><p>🕐 Ouvert tous les jours<br>de 11h00 à 23h00</p><div class="socials"><a href="#">f</a><a href="#">ig</a></div></div>
+    </div>
+    <div class="footer-bottom">© 2025 Tawrirte Café & Restaurant. Tous droits réservés.</div>
+  </footer>
+
+  <script>
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 40));
+    const menuToggle = document.getElementById('menuToggle');
+    const nav = document.getElementById('nav');
+    menuToggle.addEventListener('click', () => nav.classList.toggle('open'));
+    document.querySelectorAll('.nav a').forEach(link => link.addEventListener('click', () => nav.classList.remove('open')));
+  </script>
+</body>
+</html>
